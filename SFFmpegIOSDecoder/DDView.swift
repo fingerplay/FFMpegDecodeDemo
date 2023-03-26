@@ -526,9 +526,9 @@ class DDView: UIView {
         
 
         glUniform1i(glGetUniformLocation(self.myPrograme, "SamplerY"), 0)
-        glUniform1i(glGetUniformLocation(self.myPrograme, "SamplerUV"), 1)
-//        glUniform1i(glGetUniformLocation(self.myPrograme, "SamplerU"), 1)
-//        glUniform1i(glGetUniformLocation(self.myPrograme, "SamplerV"), 2)
+//        glUniform1i(glGetUniformLocation(self.myPrograme, "SamplerUV"), 1)
+        glUniform1i(glGetUniformLocation(self.myPrograme, "SamplerU"), 1)
+        glUniform1i(glGetUniformLocation(self.myPrograme, "SamplerV"), 2)
         glUniformMatrix3fv(glGetUniformLocation(self.myPrograme, "colorConversionMatrix"), 1, GLboolean(GL_FALSE), preferredConversion)
         
         glDrawArrays(GLenum(GL_TRIANGLES), 0, 6)
