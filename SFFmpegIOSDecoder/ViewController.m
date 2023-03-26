@@ -102,9 +102,9 @@ BOOL isShowWindow = false;
     
     self.audioPlayer = [[PCMAudioPlayer alloc] init];
     self.audioPlayer.delegate = self;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self postFinishLaunchWithWidth:width height:height];
-//    });
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self postFinishLaunchWithWidth:width height:height];
+    });
 
 }
 
@@ -323,20 +323,20 @@ static int upload_texture(SDL_Texture **tex, AVFrame *frame, struct SwsContext *
     return ret;
 }
 
-- (void)dispatchAVFrame:(AVFrame*) frame{
-//    SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 255);
-//    SDL_RenderClear(sdl_renderer);
-//    SDL_Rect rect;
-//    calculate_display_rect(&rect, 0, 0, self.view.bounds.size.width, self.view.bounds.size.height, frame->width, frame->height, frame->sample_aspect_ratio);
-//    SDL_Texture *texture = NULL;
-//    if (upload_texture(&texture, frame, NULL) < 0) {
-////        set_sdl_yuv_conversion_mode(NULL);
-//        return;
-//    }
-//    SDL_RenderCopyEx(sdl_renderer, texture, NULL, &rect, 0, NULL,  0);
-//    SDL_RenderPresent(sdl_renderer);
-//
-//    return;
+- (void)dispatchAVFrame:(AVFrame*)frame{
+    SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 255);
+    SDL_RenderClear(sdl_renderer);
+    SDL_Rect rect;
+    calculate_display_rect(&rect, 0, 0, self.view.bounds.size.width, self.view.bounds.size.height, frame->width, frame->height, frame->sample_aspect_ratio);
+    SDL_Texture *texture = NULL;
+    if (upload_texture(&texture, frame, NULL) < 0) {
+//        set_sdl_yuv_conversion_mode(NULL);
+        return;
+    }
+    SDL_RenderCopyEx(sdl_renderer, texture, NULL, &rect, 0, NULL,  0);
+    SDL_RenderPresent(sdl_renderer);
+
+    return;
 
     
     if(!frame || !frame->data[0]){

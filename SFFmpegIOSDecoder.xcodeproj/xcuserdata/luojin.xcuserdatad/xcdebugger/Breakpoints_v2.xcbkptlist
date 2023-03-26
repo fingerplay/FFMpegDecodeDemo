@@ -1162,22 +1162,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "65F2FA82-AD23-4245-AE34-0FE5F55B2E12"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../../../Downloads/SDL-release-2.0.8/src/render/opengles2/SDL_render_gles2.c"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "580"
-            endingLineNumber = "580"
-            landmarkName = "GLES2_CreateTexture(renderer, texture)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "2BB5D233-F07B-4D86-9A85-C419B90C4BA6"
             shouldBeEnabled = "No"
             ignoreCount = "0"
@@ -1396,22 +1380,6 @@
             startingLineNumber = "423"
             endingLineNumber = "423"
             landmarkName = "fixData(width, height, pixels, pitch)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "A0F274EB-F3F0-4D14-9012-AF7E31702A3B"
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../../../../Downloads/SDL-release-2.0.8/src/render/opengles2/SDL_render_gles2.c"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "874"
-            endingLineNumber = "874"
-            landmarkName = "GLES2_UpdateTextureYUV(renderer, texture, rect, Yplane, Ypitch, Uplane, Upitch, Vplane, Vpitch)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
