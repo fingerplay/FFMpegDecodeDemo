@@ -1,13 +1,11 @@
-最简单的基于FFmpeg的视频解码器-IOS
-Simplest FFmpeg IOS Decoder
+基于ffmpeg 进行h264的解码， 并通过opengles进行渲染
 
-雷霄骅 Lei Xiaohua
-leixiaohua1020@126.com
-中国传媒大学/数字电视技术
-Communication University of China / Digital TV Technology
-http://blog.csdn.net/leixiaohua1020
+解码部分：
+参考ffplay ,通过demuxer和decoder 两个对象实现视频的解封装和解码，两个对象有各自的线程，确保性能不受影响
 
+音视频同步：
+视频向音频靠齐，通过对比 pts ，实现方法为
+- (BOOL)scheduleVideoFrame:(AVFrame*)avFrame fps:(double)fps frame_delay:(double)frame_delay 
 
-simplest_ffmpeg_ios_decoder: IOS平台下最简单的基于FFmpeg的视频解码器
-
-simplest_ffmpeg_ios_decoder: Simplest decoder based on FFmpeg in IOS.
+渲染部分：
+由于测试的视频都是使用yuv420编码，因此使用了Y和UV双平面编码的方式，将解码后的数据打包到CVPixelBufferRef对象中，传递给openglES进行渲染。也可以直接传递数据给openglES，但不能使用CVOpenGLESTextureCacheCreateTextureFromImage这个方法，可以参考注释掉的代码使用glTexImage2D来载入纹理数据。
