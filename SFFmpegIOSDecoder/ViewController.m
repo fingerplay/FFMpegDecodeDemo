@@ -391,23 +391,23 @@ static int upload_texture(SDL_Texture **tex, AVFrame *frame, struct SwsContext *
 //    [self dispatchPixelBuffer:pixelBuffer];
 //    free(dstData);
 //    CVPixelBufferRelease(pixelBuffer);
-//    uint8_t *frameData0, *frameData1, *frameData2;
-//    frameData0 = fixData(frame->width, frame->height, frame->data[0], frame->linesize[0]);
-//    frameData1 = fixData(frame->width/2, frame->height/2, frame->data[1], frame->linesize[1]);
-//    frameData2 = fixData(frame->width/2, frame->height/2, frame->data[2], frame->linesize[2]);
-//
-//    [self.glView renderBufferWithYData:frameData0 uData:frameData1 vData:frameData2 frameWidth:frame->width frameHeight:frame->height];
+    uint8_t *frameData0, *frameData1, *frameData2;
+    frameData0 = fixData(frame->width, frame->height, frame->data[0], frame->linesize[0]);
+    frameData1 = fixData(frame->width/2, frame->height/2, frame->data[1], frame->linesize[1]);
+    frameData2 = fixData(frame->width/2, frame->height/2, frame->data[2], frame->linesize[2]);
 
-    [self.glView renderBufferWithYData:frame->data[0] uData:frame->data[1] vData:frame->data[2] frameWidth:frame->width frameHeight:frame->height];
-//    if (frameData0) {
-//        free(frameData0);
-//    }
-//    if (frameData1) {
-//        free(frameData1);
-//    }
-//    if (frameData2) {
-//        free(frameData2);
-//    }
+    [self.glView renderBufferWithYData:frameData0 uData:frameData1 vData:frameData2 frameWidth:frame->width frameHeight:frame->height];
+
+//    [self.glView renderBufferWithYData:frame->data[0] uData:frame->data[1] vData:frame->data[2] frameWidth:frame->width frameHeight:frame->height];
+    if (frameData0) {
+        free(frameData0);
+    }
+    if (frameData1) {
+        free(frameData1);
+    }
+    if (frameData2) {
+        free(frameData2);
+    }
     //本来应该在decoder里面释放的，但是因为渲染线程跟解码线程不一样，所以延迟到渲染结束后再释放
     av_frame_free(&frame);
 }
