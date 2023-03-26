@@ -15,9 +15,9 @@ varying lowp vec2 varyTextCoord; //顶点着色器传递过来的纹理坐标
 
 
 uniform sampler2D SamplerY;
-uniform sampler2D SamplerUV;
-//uniform sampler2D SamplerU;
-//uniform sampler2D SamplerV;
+//uniform sampler2D SamplerUV;
+uniform sampler2D SamplerU;
+uniform sampler2D SamplerV;
 uniform mat3 colorConversionMatrix;
 
 void main()
@@ -26,10 +26,10 @@ void main()
     lowp vec3 rgb;
     
     // Subtract constants to map the video range start at 0
-    yuv.x = texture2D(SamplerY, varyTextCoord).r; //- 0.0625;
-//    yuv.y = texture2D(SamplerU, varyTextCoord).r -0.5;
-//    yuv.z = texture2D(SamplerV, varyTextCoord).r -0.5;
-    yuv.yz = texture2D(SamplerUV, varyTextCoord).ra - vec2(0.5, 0.5);
+    yuv.x = texture2D(SamplerY, varyTextCoord).r - 0.0625;
+    yuv.y = texture2D(SamplerU, varyTextCoord).r -0.5;
+    yuv.z = texture2D(SamplerV, varyTextCoord).r -0.5;
+//    yuv.yz = texture2D(SamplerUV, varyTextCoord).ra - vec2(0.5, 0.5);
     
     rgb = colorConversionMatrix * yuv;
 

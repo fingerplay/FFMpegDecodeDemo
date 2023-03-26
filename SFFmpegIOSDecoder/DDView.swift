@@ -53,11 +53,11 @@ class DDView: UIView {
     var myPrograme: GLuint = 0
     
     var hasRender: Bool = false
-//    var  textureY: GLuint = 0
-//    var  textureU: GLuint = 1
-//    var  textureV: GLuint = 2
-    var textureY: CVOpenGLESTexture?
-    var textureUV: CVOpenGLESTexture?
+    var  textureY: GLuint = 0
+    var  textureU: GLuint = 1
+    var  textureV: GLuint = 2
+//    var textureY: CVOpenGLESTexture?
+//    var textureUV: CVOpenGLESTexture?
     var textureCache: CVOpenGLESTextureCache?
     var preferredConversion: [GLfloat] = kColorConversion601
     var isFullYUVRange: Bool = false
@@ -327,11 +327,11 @@ class DDView: UIView {
     }
     
     //设置纹理
-//    @objc func renderBuffer(yData: UnsafeRawPointer, uData: UnsafeRawPointer, vData:UnsafeRawPointer, frameWidth: Int, frameHeight: Int) {
-    @objc func renderBuffer(pixelBuffer: CVPixelBuffer) {
+    @objc func renderBuffer(yData: UnsafeRawPointer, uData: UnsafeRawPointer, vData:UnsafeRawPointer, frameWidth: Int, frameHeight: Int) {
+//    @objc func renderBuffer(pixelBuffer: CVPixelBuffer) {
 //        if let pixelBuffer = pixelBuffer {//注意⚠️：释放内存，要不然会卡住
-            if textureY != nil { textureY = nil }
-            if textureUV != nil { textureUV = nil }
+//            if textureY != nil { textureY = nil }
+//            if textureUV != nil { textureUV = nil }
 
             CVOpenGLESTextureCacheFlush(self.textureCache!, 0)
         preferredConversion = kColorConversion601
@@ -350,26 +350,26 @@ class DDView: UIView {
 //                preferredConversion = kColorConversion709
 //            }
         //v
-//        glActiveTexture(GLenum(GL_TEXTURE2))
-//        glBindTexture(GLenum(GL_TEXTURE_2D), textureV)
-//
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
-//
-//        glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GL_LUMINANCE, GLsizei(frameWidth/2), GLsizei(frameHeight/2), 0, GLenum(GL_LUMINANCE), GLenum(GL_UNSIGNED_BYTE), vData)
+        glActiveTexture(GLenum(GL_TEXTURE2))
+        glBindTexture(GLenum(GL_TEXTURE_2D), textureV)
+
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
+
+        glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GL_LUMINANCE, GLsizei(frameWidth/2), GLsizei(frameHeight/2), 0, GLenum(GL_LUMINANCE), GLenum(GL_UNSIGNED_BYTE), vData)
             
         
         //u
 
-//        glActiveTexture(GLenum(GL_TEXTURE1))
-//        glBindTexture(GLenum(GL_TEXTURE_2D), textureU)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
-//    glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GL_LUMINANCE, GLsizei(frameWidth/2), GLsizei(frameHeight/2), 0, GLenum(GL_LUMINANCE), GLenum(GL_UNSIGNED_BYTE), uData)
+        glActiveTexture(GLenum(GL_TEXTURE1))
+        glBindTexture(GLenum(GL_TEXTURE_2D), textureU)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
+    glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GL_LUMINANCE, GLsizei(frameWidth/2), GLsizei(frameHeight/2), 0, GLenum(GL_LUMINANCE), GLenum(GL_UNSIGNED_BYTE), uData)
 
         
    
@@ -378,86 +378,86 @@ class DDView: UIView {
         //y
             glActiveTexture(GLenum(GL_TEXTURE0))
 //             Create a CVOpenGLESTexture from the CVImageBuffer
-            let frameWidth = CVPixelBufferGetWidth(pixelBuffer)
-            let frameHeight = CVPixelBufferGetHeight(pixelBuffer)
+//            let frameWidth = CVPixelBufferGetWidth(pixelBuffer)
+//            let frameHeight = CVPixelBufferGetHeight(pixelBuffer)
       
             
             //亮度纹理 使用：GL_LUMINANCE
-            let ret: CVReturn = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
-                                                                             textureCache!,
-                                                                             pixelBuffer,
-                                                                             nil,
-                                                                             GLenum(GL_TEXTURE_2D),
-                                                                             GL_LUMINANCE,
-                                                                             GLsizei(frameWidth),
-                                                                             GLsizei(frameHeight),
-                                                                             GLenum(GL_LUMINANCE),
-                                                                             GLenum(GL_UNSIGNED_BYTE),
-                                                                             0,
-                                                                             &textureY)
-            if ((ret) != 0) {
-                NSLog("CVOpenGLESTextureCacheCreateTextureFromImage ret: %d", ret)
-                /*
-                 ⚠️注意：error: -6683 是录制是配置的 kCVPixelBufferPixelFormatTypeKey 与获取的颜色格式不对应
-                 1、kCVPixelFormatType_32BGRA -->
-                 CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
-                 textureCache!,
-                 pixelBuffer,
-                 nil,
-                 GLenum(GL_TEXTURE_2D),
-                 GL_RGBA,
-                 GLsizei(frameWidth),
-                 GLsizei(frameHeight),
-                 GLenum(GL_BGRA),
-                 GLenum(GL_UNSIGNED_BYTE),
-                 0,
-                 &texture);
-
-                 */
-                return
-            }
-            glBindTexture(CVOpenGLESTextureGetTarget(textureY!), CVOpenGLESTextureGetName(textureY!))
-            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
-            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
-            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
-            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
-            
-//        glActiveTexture(GLenum(GL_TEXTURE0))
-//        glBindTexture(GLenum(GL_TEXTURE_2D), textureY);
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
-//        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
+//            let ret: CVReturn = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
+//                                                                             textureCache!,
+//                                                                             pixelBuffer,
+//                                                                             nil,
+//                                                                             GLenum(GL_TEXTURE_2D),
+//                                                                             GL_LUMINANCE,
+//                                                                             GLsizei(frameWidth),
+//                                                                             GLsizei(frameHeight),
+//                                                                             GLenum(GL_LUMINANCE),
+//                                                                             GLenum(GL_UNSIGNED_BYTE),
+//                                                                             0,
+//                                                                             &textureY)
+//            if ((ret) != 0) {
+//                NSLog("CVOpenGLESTextureCacheCreateTextureFromImage ret: %d", ret)
+//                /*
+//                 ⚠️注意：error: -6683 是录制是配置的 kCVPixelBufferPixelFormatTypeKey 与获取的颜色格式不对应
+//                 1、kCVPixelFormatType_32BGRA -->
+//                 CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
+//                 textureCache!,
+//                 pixelBuffer,
+//                 nil,
+//                 GLenum(GL_TEXTURE_2D),
+//                 GL_RGBA,
+//                 GLsizei(frameWidth),
+//                 GLsizei(frameHeight),
+//                 GLenum(GL_BGRA),
+//                 GLenum(GL_UNSIGNED_BYTE),
+//                 0,
+//                 &texture);
 //
-//        glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GL_LUMINANCE, GLsizei(frameWidth), GLsizei(frameHeight), 0, GLenum(GL_LUMINANCE), GLenum(GL_UNSIGNED_BYTE), yData)
+//                 */
+//                return
+//            }
+//            glBindTexture(CVOpenGLESTextureGetTarget(textureY!), CVOpenGLESTextureGetName(textureY!))
+//            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
+//            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
+//            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
+//            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
+            
+        glActiveTexture(GLenum(GL_TEXTURE0))
+        glBindTexture(GLenum(GL_TEXTURE_2D), textureY);
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
+        glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
+
+        glTexImage2D(GLenum(GL_TEXTURE_2D), 0, GL_LUMINANCE, GLsizei(frameWidth), GLsizei(frameHeight), 0, GLenum(GL_LUMINANCE), GLenum(GL_UNSIGNED_BYTE), yData)
        
 
 
             
-            glActiveTexture(GLenum(GL_TEXTURE1))
-            //色度纹理 使用：GL_LUMINANCE_ALPHA
-            let retUV: CVReturn = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
-                                                                               textureCache!,
-                                                                               pixelBuffer,
-                                                                               nil,
-                                                                               GLenum(GL_TEXTURE_2D),
-                                                                               GL_LUMINANCE_ALPHA,
-                                                                               GLsizei(frameWidth / 2),
-                                                                               GLsizei(frameHeight / 2),
-                                                                               GLenum(GL_LUMINANCE_ALPHA),
-                                                                               GLenum(GL_UNSIGNED_BYTE),
-                                                                               1,
-                                                                               &textureUV)
-            if ((retUV) != 0) {
-                NSLog("CVOpenGLESTextureCacheCreateTextureFromImage retUV: %d", retUV)
-                return
-            }
-            glBindTexture(CVOpenGLESTextureGetTarget(textureUV!), CVOpenGLESTextureGetName(textureUV!))
-       
-            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
-            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
-            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
-            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
+//            glActiveTexture(GLenum(GL_TEXTURE1))
+//            //色度纹理 使用：GL_LUMINANCE_ALPHA
+//            let retUV: CVReturn = CVOpenGLESTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
+//                                                                               textureCache!,
+//                                                                               pixelBuffer,
+//                                                                               nil,
+//                                                                               GLenum(GL_TEXTURE_2D),
+//                                                                               GL_LUMINANCE_ALPHA,
+//                                                                               GLsizei(frameWidth / 2),
+//                                                                               GLsizei(frameHeight / 2),
+//                                                                               GLenum(GL_LUMINANCE_ALPHA),
+//                                                                               GLenum(GL_UNSIGNED_BYTE),
+//                                                                               1,
+//                                                                               &textureUV)
+//            if ((retUV) != 0) {
+//                NSLog("CVOpenGLESTextureCacheCreateTextureFromImage retUV: %d", retUV)
+//                return
+//            }
+//            glBindTexture(CVOpenGLESTextureGetTarget(textureUV!), CVOpenGLESTextureGetName(textureUV!))
+//
+//            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MAG_FILTER), GL_LINEAR)
+//            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_MIN_FILTER), GL_LINEAR)
+//            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_S), GL_CLAMP_TO_EDGE)
+//            glTexParameteri(GLenum(GL_TEXTURE_2D), GLenum(GL_TEXTURE_WRAP_T), GL_CLAMP_TO_EDGE)
        
 //        }
         

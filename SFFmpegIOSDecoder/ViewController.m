@@ -102,9 +102,9 @@ BOOL isShowWindow = false;
     
     self.audioPlayer = [[PCMAudioPlayer alloc] init];
     self.audioPlayer.delegate = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self postFinishLaunchWithWidth:width height:height];
-    });
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        [self postFinishLaunchWithWidth:width height:height];
+//    });
 
 }
 
@@ -324,80 +324,81 @@ static int upload_texture(SDL_Texture **tex, AVFrame *frame, struct SwsContext *
 }
 
 - (void)dispatchAVFrame:(AVFrame*)frame{
-    SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 255);
-    SDL_RenderClear(sdl_renderer);
-    SDL_Rect rect;
-    calculate_display_rect(&rect, 0, 0, self.view.bounds.size.width, self.view.bounds.size.height, frame->width, frame->height, frame->sample_aspect_ratio);
-    SDL_Texture *texture = NULL;
-    if (upload_texture(&texture, frame, NULL) < 0) {
-//        set_sdl_yuv_conversion_mode(NULL);
-        return;
-    }
-    SDL_RenderCopyEx(sdl_renderer, texture, NULL, &rect, 0, NULL,  0);
-    SDL_RenderPresent(sdl_renderer);
-
-    return;
+//    SDL_SetRenderDrawColor(sdl_renderer, 0, 0, 0, 255);
+//    SDL_RenderClear(sdl_renderer);
+//    SDL_Rect rect;
+//    calculate_display_rect(&rect, 0, 0, self.view.bounds.size.width, self.view.bounds.size.height, frame->width, frame->height, frame->sample_aspect_ratio);
+//    SDL_Texture *texture = NULL;
+//    if (upload_texture(&texture, frame, NULL) < 0) {
+////        set_sdl_yuv_conversion_mode(NULL);
+//        return;
+//    }
+//    SDL_RenderCopyEx(sdl_renderer, texture, NULL, &rect, 0, NULL,  0);
+//    SDL_RenderPresent(sdl_renderer);
+//
+//    return;
 
     
-    if(!frame || !frame->data[0]){
-        return;
-    }
- 
-    CVReturn theError;
-    if (!self.pixelBufferPool){
-        NSMutableDictionary* attributes = [NSMutableDictionary dictionary];
-        [attributes setObject:[NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange] forKey:(NSString*)kCVPixelBufferPixelFormatTypeKey];
-        [attributes setObject:[NSNumber numberWithInt:frame->width] forKey: (NSString*)kCVPixelBufferWidthKey];
-        [attributes setObject:[NSNumber numberWithInt:frame->height] forKey: (NSString*)kCVPixelBufferHeightKey];
-        [attributes setObject:@(frame->linesize[0]) forKey:(NSString*)kCVPixelBufferBytesPerRowAlignmentKey];
-        [attributes setObject:[NSDictionary dictionary] forKey:(NSString*)kCVPixelBufferIOSurfacePropertiesKey];
-        theError = CVPixelBufferPoolCreate(kCFAllocatorDefault, NULL, (__bridge CFDictionaryRef) attributes, &_pixelBufferPool);
-        if (theError != kCVReturnSuccess){
-            NSLog(@"CVPixelBufferPoolCreate Failed");
-        }
-    }
-
-    CVPixelBufferRef pixelBuffer = nil;
-    theError = CVPixelBufferPoolCreatePixelBuffer(NULL, self.pixelBufferPool, &pixelBuffer);
-    if(theError != kCVReturnSuccess){
-        NSLog(@"CVPixelBufferPoolCreatePixelBuffer Failed");
-    }
-
-    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
-//    size_t bytePerRowY = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
-//    size_t bytesPerRowUV = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
-    void* base = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
-    memcpy(base, frame->data[0], frame->linesize[0] * frame->height);
-//    uint8_t* yData = fixData(frame->width, frame->height, frame->data[0], frame->linesize[0]);
-//    memcpy(base, yData, frame->width * frame->height);
-    base = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
-//    memcpy(base, frame->data[1], frame->linesize[1] * frame->height/2);
-    uint32_t size = frame->width/2 * frame->height/2;
-    uint8_t* dstData = (uint8_t*) malloc(2 * size);
-//    uint8_t* uData = fixData(frame->width/2, frame->height/2, frame->data[1], frame->linesize[1]);
-//    uint8_t* vData = fixData(frame->width/2, frame->height/2, frame->data[2], frame->linesize[2]);
-    for (int i = 0; i < 2 * size; i++){
-        if (i % 2 == 0){
-            dstData[i] = frame->data[1][i/2];
-//            dstData[i] = uData[i/2];
-        }else {
-            dstData[i] = frame->data[2][i/2];
-//            dstData[i] = vData[i/2];
-        }
-    }
-    memcpy(base, dstData, 2* size);
-    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-
-    [self dispatchPixelBuffer:pixelBuffer];
-    free(dstData);
-    CVPixelBufferRelease(pixelBuffer);
+//    if(!frame || !frame->data[0]){
+//        return;
+//    }
+//
+//    CVReturn theError;
+//    if (!self.pixelBufferPool){
+//        NSMutableDictionary* attributes = [NSMutableDictionary dictionary];
+//        [attributes setObject:[NSNumber numberWithInt:kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange] forKey:(NSString*)kCVPixelBufferPixelFormatTypeKey];
+//        [attributes setObject:[NSNumber numberWithInt:frame->width] forKey: (NSString*)kCVPixelBufferWidthKey];
+//        [attributes setObject:[NSNumber numberWithInt:frame->height] forKey: (NSString*)kCVPixelBufferHeightKey];
+//        [attributes setObject:@(frame->linesize[0]) forKey:(NSString*)kCVPixelBufferBytesPerRowAlignmentKey];
+//        [attributes setObject:[NSDictionary dictionary] forKey:(NSString*)kCVPixelBufferIOSurfacePropertiesKey];
+//        theError = CVPixelBufferPoolCreate(kCFAllocatorDefault, NULL, (__bridge CFDictionaryRef) attributes, &_pixelBufferPool);
+//        if (theError != kCVReturnSuccess){
+//            NSLog(@"CVPixelBufferPoolCreate Failed");
+//        }
+//    }
+//
+//    CVPixelBufferRef pixelBuffer = nil;
+//    theError = CVPixelBufferPoolCreatePixelBuffer(NULL, self.pixelBufferPool, &pixelBuffer);
+//    if(theError != kCVReturnSuccess){
+//        NSLog(@"CVPixelBufferPoolCreatePixelBuffer Failed");
+//    }
+//
+//    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+////    size_t bytePerRowY = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 0);
+////    size_t bytesPerRowUV = CVPixelBufferGetBytesPerRowOfPlane(pixelBuffer, 1);
+//    void* base = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
+//    memcpy(base, frame->data[0], frame->linesize[0] * frame->height);
+////    uint8_t* yData = fixData(frame->width, frame->height, frame->data[0], frame->linesize[0]);
+////    memcpy(base, yData, frame->width * frame->height);
+//    base = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 1);
+////    memcpy(base, frame->data[1], frame->linesize[1] * frame->height/2);
+//    uint32_t size = frame->width/2 * frame->height/2;
+//    uint8_t* dstData = (uint8_t*) malloc(2 * size);
+////    uint8_t* uData = fixData(frame->width/2, frame->height/2, frame->data[1], frame->linesize[1]);
+////    uint8_t* vData = fixData(frame->width/2, frame->height/2, frame->data[2], frame->linesize[2]);
+//    for (int i = 0; i < 2 * size; i++){
+//        if (i % 2 == 0){
+//            dstData[i] = frame->data[1][i/2];
+////            dstData[i] = uData[i/2];
+//        }else {
+//            dstData[i] = frame->data[2][i/2];
+////            dstData[i] = vData[i/2];
+//        }
+//    }
+//    memcpy(base, dstData, 2* size);
+//    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+//
+//    [self dispatchPixelBuffer:pixelBuffer];
+//    free(dstData);
+//    CVPixelBufferRelease(pixelBuffer);
 //    uint8_t *frameData0, *frameData1, *frameData2;
 //    frameData0 = fixData(frame->width, frame->height, frame->data[0], frame->linesize[0]);
 //    frameData1 = fixData(frame->width/2, frame->height/2, frame->data[1], frame->linesize[1]);
 //    frameData2 = fixData(frame->width/2, frame->height/2, frame->data[2], frame->linesize[2]);
 //
 //    [self.glView renderBufferWithYData:frameData0 uData:frameData1 vData:frameData2 frameWidth:frame->width frameHeight:frame->height];
-//
+
+    [self.glView renderBufferWithYData:frame->data[0] uData:frame->data[1] vData:frame->data[2] frameWidth:frame->width frameHeight:frame->height];
 //    if (frameData0) {
 //        free(frameData0);
 //    }
@@ -449,7 +450,7 @@ static uint8_t* fixData(GLsizei width, GLsizei height,  const GLvoid *pixels, GL
 //    self.glLayer.pixelBuffer = pixelBuffer;
 //    [self.glView dispatchPixelBuffer:pixelBuffer];
     
-    [self.glView renderBufferWithPixelBuffer:pixelBuffer];
+//    [self.glView renderBufferWithPixelBuffer:pixelBuffer];
    
 }
 
